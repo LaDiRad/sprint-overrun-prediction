@@ -1,3 +1,0 @@
-Comparison,Mean MCC (A),Mean MCC (B),Statistic,p-value,Significant (a=0.05)
-Random Forest (opt.) vs XGBoost (opt.),0.435,0.401,0.0,0.002,Yes
-Random Forest (opt.) vs Random Forest (base),0.435,0.348,0.0,0.002,Yes
