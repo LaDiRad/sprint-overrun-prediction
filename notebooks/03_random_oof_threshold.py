@@ -31,7 +31,6 @@ X_train, X_test, y_train, y_test = joblib.load(f'{IN2}/split_random.pkl')
 cv_skf = joblib.load(f'{IN2}/cv_scheme.pkl')
 
 print(f'Train: {len(X_train)} | Test: {len(X_test)}')
-print('This is the SAME random split used for the naive (contaminated) baseline.')
 
 # Reuse optimized models from permissive protocol (A)
 
@@ -125,7 +124,7 @@ def mcc_per_fold(model, X, y, cv, threshold=0.5):
 df_final_oof = pd.read_csv(f'{OUT}/table_final_test_results.csv')
 MODEL_FINAL_OOF = df_final_oof.loc[0, 'Model']
 RUNNER_UP_OOF   = df_final_oof.loc[1, 'Model']
-print(f'Castigator: {MODEL_FINAL_OOF} | Runner-up: {RUNNER_UP_OOF}')
+print(f'Winner: {MODEL_FINAL_OOF} | Runner-up: {RUNNER_UP_OOF}')
 
 mcc_final = mcc_per_fold(
     modele_opt[MODEL_FINAL_OOF], X_train, y_train, cv_skf,

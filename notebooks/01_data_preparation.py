@@ -65,16 +65,16 @@ print(f'Remaining: {n_after}')
 
 df['_year'] = df['Created At'].dt.to_period('Q').astype(str)
 tmp = df.copy()
-tmp['depaseste_sprint_14'] = (tmp['Time_Taken_Days'] > 14).astype(int)
+tmp['exceed_sprint_14'] = (tmp['Time_Taken_Days'] > 14).astype(int)
 print('Exceed-sprint rate by quarter (AFTER maturity filter):')
-print(tmp.groupby('_year')['depaseste_sprint_14'].agg(['mean', 'count']).tail(12))
+print(tmp.groupby('_year')['exceed_sprint_14'].agg(['mean', 'count']).tail(12))
 df = df.drop(columns=['_year'])
 
 # Set sprint timeframe
 
 SPRINT_DAYS = 14
-df['depaseste_sprint'] = (df['Time_Taken_Days'] > SPRINT_DAYS).astype(int)
-print(f'Target (14-day threshold): {df["depaseste_sprint"].mean()*100:.1f}% exceed-sprint')
+df['exceed_sprint'] = (df['Time_Taken_Days'] > SPRINT_DAYS).astype(int)
+print(f'Target (14-day threshold): {df["exceed_sprint"].mean()*100:.1f}% exceed-sprint')
 
 cleaning_log = pd.DataFrame([
     {'Step': 'Raw dataset', 'N': n0},
@@ -178,10 +178,10 @@ lipsa = df.isnull().sum()
 print('Missing before imputation:')
 print(lipsa[lipsa > 0])
 
+# Contributors Expertise imputed with median
+
 df['Contributors Expertise'] = df['Contributors Expertise'].fillna(
     df['Contributors Expertise'].median())
-
-print('\nContributors Expertise imputed with median')
 
 # Final features set
 
@@ -231,7 +231,7 @@ repo_counts.to_csv(f'{OUT}/table_repository_counts.csv')
 import joblib
 
 # full processed dataframe, keeps Repository + Created At for later stages
-keep_cols = FEATURE_COLS + ['depaseste_sprint', 'Time_Taken_Days',
+keep_cols = FEATURE_COLS + ['exceed_sprint', 'Time_Taken_Days',
                              'Created At', 'Repository']
 df_final = df[keep_cols].copy()
 df_final.to_csv(f'{OUT}/df_final.csv', index=False)
