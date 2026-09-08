@@ -22,7 +22,7 @@ This study uses the **AgES dataset** (Shankar et al., 2026), publicly available 
 project_directory/
 ├── Datasets/
 │   └── df_final.csv
-│   └── table_repositoryt.counts.csv
+│   └── table_repository.counts.csv
 ├── notebooks/
 │   └── 01_data_preparation.py
 │   └── 02_chronological_split_and_benchmark.py
