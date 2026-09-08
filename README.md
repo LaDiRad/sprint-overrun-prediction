@@ -17,6 +17,8 @@ This study uses the **AgES dataset** (Shankar et al., 2026), publicly available 
 
 **Repository structure**
 
+
+```
 project_directory/
 ├── Datasets/
 │   └── df_final.csv
@@ -33,6 +35,8 @@ project_directory/
 │   └── 05_cross_project_split.py
 │   └── 06_protocol_comparison.py
 ├── Results/
+
+```
 
 **Reproducing the results**
 
