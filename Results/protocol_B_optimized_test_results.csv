@@ -1,0 +1,8 @@
+Model,Threshold,Test AUC,Precision (Exceeds),Recall (Exceeds),F1 (Exceeds),MCC,Accuracy (weighted),F1 (weighted)
+Random Forest,0.441,0.799,0.596,0.79,0.679,0.443,0.713,0.717
+XGBoost,0.396,0.78,0.58,0.752,0.655,0.4,0.695,0.699
+Gradient Boosting,0.371,0.757,0.544,0.784,0.642,0.365,0.664,0.667
+MLP,0.238,0.707,0.486,0.792,0.603,0.271,0.599,0.598
+AdaBoost,0.444,0.685,0.47,0.827,0.599,0.254,0.575,0.567
+Decision Tree,0.133,0.684,0.459,0.839,0.593,0.234,0.557,0.545
+Logistic Regression,0.411,0.647,0.436,0.809,0.566,0.167,0.524,0.509
