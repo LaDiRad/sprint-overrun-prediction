@@ -34,7 +34,7 @@ project_directory/
 │   └── 04_random_statistical_testing.py
 │   └── 05_cross_project_split.py
 │   └── 06_protocol_comparison.py
-
+├── README.md
 ```
 
 **Reproducing the results**
