@@ -38,7 +38,7 @@ TOP_K = 7
 modele_selectate = df_base.sort_values('CV AUC', ascending=False)['Model'].head(TOP_K).tolist()
 print('Selected for optimization:', modele_selectate)
 
-# RandomizeSearchCV - same search space as the chronological pipeline
+# RandomizedSearchCV - same search space as the chronological pipeline
 
 from imblearn.pipeline import Pipeline as ImbPipeline
 from imblearn.over_sampling import SMOTE
@@ -126,10 +126,6 @@ df_params
 
 # Threshold selection - directly on test dataset - Permissive
 
-import joblib
-modele_opt = joblib.load(f'{OUT}/modele_optimizate.pkl')
-print(list(modele_opt.keys()))
-
 from sklearn.metrics import precision_recall_curve, matthews_corrcoef
 
 def prag_pe_test_PERMISIV(model, X_test, y_test, nume=''):
@@ -147,15 +143,10 @@ for nume, model in modele_opt.items():
 
 joblib.dump(thresholds, f'{OUT}/thresholds.pkl')
 
+# Final evaluation
 
-
-import joblib
 from sklearn.metrics import (roc_auc_score, f1_score, accuracy_score,
                              precision_score, recall_score, matthews_corrcoef)
-
-# Load optimized models and thresholds
-modele_opt = joblib.load(f'{OUT}/modele_optimizate.pkl')
-thresholds = joblib.load(f'{OUT}/thresholds.pkl')
 
 rows = []
 predictii_finale = {}
@@ -182,6 +173,8 @@ df_final = pd.DataFrame(rows).sort_values('MCC', ascending=False).reset_index(dr
 df_final.to_csv(f'{OUT}/table_final_test_results.csv', index=False)
 joblib.dump(predictii_finale, f'{OUT}/predictii_finale.pkl')
 
+# MODEL_FINAL - determined here from the results
+
 MODEL_FINAL = df_final.loc[0, 'Model']
 RUNNER_UP   = df_final.loc[1, 'Model']
 joblib.dump(MODEL_FINAL, f'{OUT}/model_final_name.pkl')
@@ -190,24 +183,10 @@ joblib.dump(RUNNER_UP, f'{OUT}/runner_up_name.pkl')
 print(f'Final model (Protocol A): {MODEL_FINAL}   |   Runner-up: {RUNNER_UP}')
 df_final
 
-# Confusion metric
+# Confusion matrix — final model, base vs. optimized
 
-import joblib
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
-
-MODEL_FINAL = 'Random Forest'
-
-actual_models = joblib.load(f'{OUT}/modele_optimizate.pkl')
-
-thresholds = joblib.load(f'{OUT}/thresholds.pkl')
-print(list(thresholds.keys()))
-
-predictii_finale = {}
-for nume, model in actual_models.items():
-    y_proba = model.predict_proba(X_test)[:, 1]
-    y_pred = (y_proba >= thresholds[nume]).astype(int)
-    predictii_finale[nume] = {'y_proba': y_proba, 'y_pred': y_pred}
 
 rezultate_base = joblib.load(f'{IN2}/rezultate_base.pkl')
 y_pred_base_final = rezultate_base[MODEL_FINAL]['y_pred']
@@ -240,10 +219,7 @@ plt.tight_layout()
 plt.savefig(f'{OUT}/fig_confusion_matrix.png', dpi=300, bbox_inches='tight')
 plt.show()
 
-import numpy as np
-import pandas as pd
-import joblib
-from sklearn.metrics import roc_auc_score, precision_score, recall_score, f1_score, matthews_corrcoef
+# Bootstrap confidence intervals — final model
 
 def bootstrap_ci(y_true, y_pred, y_proba, n_boot=2000, seed=RANDOM_STATE):
     rng = np.random.RandomState(seed)
@@ -267,18 +243,6 @@ def bootstrap_ci(y_true, y_pred, y_proba, n_boot=2000, seed=RANDOM_STATE):
                     'CI upper (97.5%)': round(np.percentile(v, 97.5), 3)})
     return pd.DataFrame(out)
 
-MODEL_FINAL = 'Random Forest'
-
-actual_models = joblib.load(f'{OUT}/modele_optimizate.pkl')
-
-thresholds = joblib.load(f'{OUT}/thresholds.pkl')
-
-predictii_finale = {}
-for nume, model in actual_models.items():
-    y_proba = model.predict_proba(X_test)[:, 1]
-    y_pred = (y_proba >= thresholds[nume]).astype(int)
-    predictii_finale[nume] = {'y_proba': y_proba, 'y_pred': y_pred}
-
 pf = predictii_finale[MODEL_FINAL]
 df_ci = bootstrap_ci(y_test, pf['y_pred'], pf['y_proba'])
 df_ci.to_csv(f'{OUT}/table_bootstrap_ci.csv', index=False)
@@ -289,16 +253,14 @@ df_ci
 
 import matplotlib.pyplot as plt
 
-actual_models = joblib.load(f'{OUT}/modele_optimizate.pkl')
-
-clf = actual_models[MODEL_FINAL].named_steps['clf']
+clf = modele_opt[MODEL_FINAL].named_steps['clf']
 
 if hasattr(clf, 'feature_importances_'):
     imp = pd.Series(clf.feature_importances_, index=FEATURE_COLS)
     xlabel = 'Feature importance (impurity-based)'
 else:
     from sklearn.inspection import permutation_importance
-    pi = permutation_importance(actual_models[MODEL_FINAL], X_test, y_test, n_repeats=10,
+    pi = permutation_importance(modele_opt[MODEL_FINAL], X_test, y_test, n_repeats=10,
                                 random_state=RANDOM_STATE, scoring='roc_auc', n_jobs=-1)
     imp = pd.Series(pi.importances_mean, index=FEATURE_COLS)
     xlabel = 'Permutation importance (ROC-AUC drop)'
@@ -312,7 +274,7 @@ bars = ax.barh(top10.index, top10.values, color='#2a78d6')
 for b, v in zip(bars, top10.values):
     ax.text(b.get_width() + top10.max()*0.01, b.get_y()+b.get_height()/2, f'{v:.3f}', va='center', fontsize=9)
 ax.set_xlabel(xlabel)
-ax.set_title(f'Top 10 feature importance — {MODEL_FINAL} — random split ', fontweight='bold', fontsize=13)
+ax.set_title(f'Top 10 feature importance — {MODEL_FINAL} — random split', fontweight='bold', fontsize=13)
 ax.set_xlim(0, top10.max()*1.18)
 ax.grid(axis='x', alpha=0.3); ax.spines[['top','right']].set_visible(False)
 plt.tight_layout()
@@ -320,7 +282,5 @@ plt.savefig(f'{OUT}/fig_feature_importance.png', dpi=300, bbox_inches='tight')
 plt.show()
 imp.head(10)
 
-# Save final model
-
 joblib.dump(modele_opt[MODEL_FINAL], f'{OUT}/final_model.pkl')
-print(f' Saved to {OUT}')
+print(f'Saved to {OUT}')
