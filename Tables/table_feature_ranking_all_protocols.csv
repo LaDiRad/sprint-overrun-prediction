@@ -1,0 +1,28 @@
+,Rank (A: permissive),Rank (B: medium),Rank (C: rigorous)
+assignee_avg_duration,1,1,1
+assignee_task_count,3,3,2
+log_body_len,2,2,3
+Contributors Expertise,4,4,4
+n_labels,8,8,5
+assignee_open_tasks,7,7,6
+title_len,5,5,7
+n_negative_words,9,9,8
+is_feature_label,17,17,9
+created_hour,6,6,10
+comp_ui,12,12,11
+cat_bug,13,13,12
+has_milestone,14,14,13
+created_dayofweek,10,10,14
+body_has_steps,15,15,15
+n_complexity_words,11,11,16
+comp_network,18,18,17
+n_urgency_words,19,19,18
+cat_improvement,20,20,19
+comp_security,23,23,20
+comp_api,16,16,21
+comp_backend,24,24,22
+n_assignees,21,21,23
+comp_database,25,25,24
+cat_feature,26,26,25
+comp_performance,22,22,26
+comp_authentication,27,27,27
