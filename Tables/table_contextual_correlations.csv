@@ -1,8 +1,0 @@
-Factor,rho,p-value
-n_issues,0.385,0.0937
-exceed_rate,-0.608,0.0045
-n_contributors,0.164,0.4891
-mean_labels,0.005,0.9849
-pct_with_milestone,-0.028,0.9073
-issues_per_year,0.326,0.1603
-median_duration,-0.639,0.0024
