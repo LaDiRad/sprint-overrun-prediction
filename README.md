@@ -23,7 +23,7 @@ project_directory/
 ├── Datasets/
 │   └── df_final.csv
 │   └── table_repository.counts.csv
-├── notebooks/
+├── Notebooks/
 │   └── 01_data_preparation.py
 │   └── 02_chronological_split_and_benchmark.py
 │   └── 02_random_split_and_benchmark.py
@@ -34,7 +34,19 @@ project_directory/
 │   └── 04_random_statistical_testing.py
 │   └── 05_cross_project_split.py
 │   └── 06_protocol_comparison.py
-├── README.md
+├── Figures/
+│   └── 01_data_preparation.py
+│   └── 02_chronological_split_and_benchmark.py
+│   └── 02_random_split_and_benchmark.py
+│   └── 03_chronological_optimization.py
+│   └── 03_random_optimization.py
+│   └── 03_random_oof_threshold.py
+│   └── 04_chronological_statistical_testing.py
+│   └── 04_random_statistical_testing.py
+│   └── 05_cross_project_split.py
+│   └── 06_protocol_comparison.py
+├── Tables/
+├── requirements.txt
 ```
 
 **Reproducing the results**
@@ -42,3 +54,6 @@ project_directory/
 Notebooks are numbered in the order they should be executed. Each notebook reads only from its designated input folder(s) and writes only to its own output folder, so re-running any single notebook does not affect the outputs of others.
 
 All notebooks were originally run in Google Colab. File paths reference Google Drive by default; adjust the `PROJECT` variable at the top of each notebook if running locally.
+
+All experiments were performed in Google Colab using Python 3.13.15.
+See **requirements.txt** for exact package versions.
