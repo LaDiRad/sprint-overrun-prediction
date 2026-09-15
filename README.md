@@ -34,18 +34,24 @@ project_directory/
 │   └── 04_random_statistical_testing.py
 │   └── 05_cross_project_split.py
 │   └── 06_protocol_comparison.py
-├── Figures/
-│   └── 01_data_preparation.py
-│   └── 02_chronological_split_and_benchmark.py
-│   └── 02_random_split_and_benchmark.py
-│   └── 03_chronological_optimization.py
-│   └── 03_random_optimization.py
-│   └── 03_random_oof_threshold.py
-│   └── 04_chronological_statistical_testing.py
-│   └── 04_random_statistical_testing.py
-│   └── 05_cross_project_split.py
-│   └── 06_protocol_comparison.py
 ├── Tables/
+│   └── table_baseline_per_class.csv
+│   └── table_chronological_baseline_full.csv
+│   └── table_chronological_final_test_results.csv
+│   └── table_chronological_split_info.csv
+│   └── table_chronological_wilcoxon.csv
+│   └── table_contextual_correlations.csv
+│   └── table_cross_project_folds_all_models.csv
+│   └── table_feature_ranking_all_protocols.csv
+│   └── table_protocol_deltas_all_models.csv
+│   └── table_random_OOF_final_test_results.csv
+│   └── table_random_OOF_wilcoxon.csv
+│   └── table_random_baseline_full.csv
+│   └── table_random_final_test_results.csv
+│   └── table_random_split_info.csv
+│   └── table_random_wilcoxon.csv
+│   └── table_within_repo_wilcoxon_all_models.csv
+├── Figures/
 ├── requirements.txt
 ```
 
