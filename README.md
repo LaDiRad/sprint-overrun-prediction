@@ -34,24 +34,32 @@ project_directory/
 │   └── 04_random_statistical_testing.py
 │   └── 05_cross_project_split.py
 │   └── 06_protocol_comparison.py
-├── Tables/
-│   └── table_baseline_per_class.csv
-│   └── table_chronological_baseline_full.csv
-│   └── table_chronological_final_test_results.csv
-│   └── table_chronological_split_info.csv
-│   └── table_chronological_wilcoxon.csv
-│   └── table_contextual_correlations.csv
-│   └── table_cross_project_folds_all_models.csv
-│   └── table_feature_ranking_all_protocols.csv
-│   └── table_protocol_deltas_all_models.csv
-│   └── table_random_OOF_final_test_results.csv
-│   └── table_random_OOF_wilcoxon.csv
-│   └── table_random_baseline_full.csv
-│   └── table_random_final_test_results.csv
-│   └── table_random_split_info.csv
-│   └── table_random_wilcoxon.csv
-│   └── table_within_repo_wilcoxon_all_models.csv
-├── Figures/
+├── Results/
+│   └── Tables/
+│       └── table_baseline_per_class.csv
+│       └── table_chronological_baseline_full.csv
+│       └── table_chronological_final_test_results.csv
+│       └── table_chronological_split_info.csv
+│       └── table_chronological_wilcoxon.csv
+│       └── table_contextual_correlations.csv
+│       └── table_cross_project_folds_all_models.csv
+│       └── table_feature_ranking_all_protocols.csv
+│       └── table_protocol_deltas_all_models.csv
+│       └── table_random_OOF_final_test_results.csv
+│       └── table_random_OOF_wilcoxon.csv
+│       └── table_random_baseline_full.csv
+│       └── table_random_final_test_results.csv
+│       └── table_random_split_info.csv
+│       └── table_random_wilcoxon.csv
+│       └── table_within_repo_wilcoxon_all_models.csv
+│   └── Figures/
+│       └──fig_chronological_confusion_matrix.png
+│       └── fig_chronological_feature_importance_top10.png
+│       └── fig_feature_rank_bumpchart.png
+│       └── fig_random_OOF_confusion_matrix.png
+│       └── fig_random_confusion_matrix.png
+│       └── fig_random_feature_importance_top10.png
+│       └── fig_roc_overlay_all_protocols.png
 ├── requirements.txt
 ```
 
