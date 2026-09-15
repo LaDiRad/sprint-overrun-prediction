@@ -96,75 +96,25 @@ df_final = pd.DataFrame(rows).sort_values('MCC', ascending=False).reset_index(dr
 df_final.to_csv(f'{OUT}/table_final_test_results.csv', index=False)
 joblib.dump(predictii_finale, f'{OUT}/predictii_finale.pkl')
 
-MODEL_FINAL = df_final.loc[0, 'Model']
-RUNNER_UP   = df_final.loc[1, 'Model']
-joblib.dump(MODEL_FINAL, f'{OUT}/model_final_name.pkl')
+
+# MODEL_FINAL - determined here from the results
+
+MODEL_FINAL_OOF = df_final.loc[0, 'Model']
+RUNNER_UP_OOF   = df_final.loc[1, 'Model']
+joblib.dump(MODEL_FINAL_OOF, f'{OUT}/model_final_name.pkl')
 joblib.dump(RUNNER_UP, f'{OUT}/runner_up_name.pkl')
 
-print(f'Best model (random split, OOF threshold): {MODEL_FINAL}')
+print(f'Final model (Protocol A): {MODEL_FINAL_OOF}   |   Runner-up: {RUNNER_UP}')
 df_final
 
-# Calculate MCC and Wilcoxon for top 2 optimized models and for the first model optimized and non-optimized
-
-from scipy.stats import wilcoxon
-from sklearn.metrics import matthews_corrcoef
-from sklearn.base import clone
-import numpy as np
-import pandas as pd
-
-def mcc_per_fold(model, X, y, cv, threshold=0.5):
-    out = []
-    for tr, va in cv.split(X, y):
-        m = clone(model)
-        m.fit(X.iloc[tr], y.iloc[tr])
-        proba = m.predict_proba(X.iloc[va])[:, 1]
-        out.append(matthews_corrcoef(y.iloc[va], (proba >= threshold).astype(int)))
-    return np.array(out)
-
-
-df_final_oof = pd.read_csv(f'{OUT}/table_final_test_results.csv')
-MODEL_FINAL_OOF = df_final_oof.loc[0, 'Model']
-RUNNER_UP_OOF   = df_final_oof.loc[1, 'Model']
-print(f'Winner: {MODEL_FINAL_OOF} | Runner-up: {RUNNER_UP_OOF}')
-
-mcc_final = mcc_per_fold(
-    modele_opt[MODEL_FINAL_OOF], X_train, y_train, cv_skf,
-    threshold=thresholds[MODEL_FINAL_OOF]
-)
-mcc_runner = mcc_per_fold(
-    modele_opt[RUNNER_UP_OOF], X_train, y_train, cv_skf,
-    threshold=thresholds[RUNNER_UP_OOF]
-)
-
-
-rezultate_base = joblib.load(f'{PROJECT}/02_random_benchmark/rezultate_base.pkl')
-mcc_own_base = mcc_per_fold(
-    rezultate_base[MODEL_FINAL_OOF]['model'], X_train, y_train, cv_skf, threshold=0.5
-)
-
-s1, p1 = wilcoxon(mcc_final, mcc_runner)
-s2, p2 = wilcoxon(mcc_final, mcc_own_base)
-
-df_wil_oof = pd.DataFrame([
-    {'Comparison': f'{MODEL_FINAL_OOF} (random+OOF) vs {RUNNER_UP_OOF} (random+OOF)',
-     'Mean MCC (A)': round(mcc_final.mean(), 3), 'Mean MCC (B)': round(mcc_runner.mean(), 3),
-     'Statistic': round(s1, 3), 'p-value': round(p1, 4),
-     'Significant (a=0.05)': 'Yes' if p1 < 0.05 else 'No'},
-    {'Comparison': f'{MODEL_FINAL_OOF} (random+OOF) vs {MODEL_FINAL_OOF} (base)',
-     'Mean MCC (A)': round(mcc_final.mean(), 3), 'Mean MCC (B)': round(mcc_own_base.mean(), 3),
-     'Statistic': round(s2, 3), 'p-value': round(p2, 4),
-     'Significant (a=0.05)': 'Yes' if p2 < 0.05 else 'No'},
-])
-print(df_wil_oof.to_string(index=False))
-
-df_wil_oof.to_csv(f'{OUT}/table_wilcoxon_random_oof.csv', index=False)
 
 # Confusion matrix
 
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 
-y_pred_base = rezultate_base[MODEL_FINAL_OOF]['y_pred']  # din 02_random_benchmark, threshold=0.50
+rezultate_base = joblib.load(f'{PROJECT}/02_random_benchmark/rezultate_base.pkl')
+y_pred_base = rezultate_base[MODEL_FINAL_OOF]['y_pred']
 
 thr_oof = thresholds[MODEL_FINAL_OOF]
 proba_oof = modele_opt[MODEL_FINAL_OOF].predict_proba(X_test)[:, 1]
